@@ -15,13 +15,13 @@ let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT
 const io = socketIO(requestHandler);
 
 // Game Server
-import MyServerEngine from './src/server/MyServerEngine';
-import MyGameEngine from './src/common/MyGameEngine';
+import ServerEngine from 'lance/ServerEngine';
 import Trace from 'lance/lib/Trace';
+import Game from './src/common/Game';
 
 // Game Instances
-const gameEngine = new MyGameEngine({ traceLevel: Trace.TRACE_NONE });
-const serverEngine = new MyServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
+const gameEngine = new Game({ traceLevel: Trace.TRACE_NONE });
+const serverEngine = new ServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
 
 // start the game
 serverEngine.start();

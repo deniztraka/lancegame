@@ -1,6 +1,6 @@
 import querystring from 'query-string';
-import MyClientEngine from '../client/MyClientEngine';
-import MyGameEngine from '../common/MyGameEngine';
+import ClientEngine from 'lance/ClientEngine';
+import Game from '../common/Game';
 const qsOptions = querystring.parse(location.search);
 
 // default options, overwritten by query-string options
@@ -19,7 +19,7 @@ const defaults = {
 let options = Object.assign(defaults, qsOptions);
 
 // create a client engine and a game engine
-const gameEngine = new MyGameEngine(options);
-const clientEngine = new MyClientEngine(gameEngine, options);
+const gameEngine = new Game(options);
+const clientEngine = new ClientEngine(gameEngine, options);
 
 document.addEventListener('DOMContentLoaded', function(e) { clientEngine.start(); });
