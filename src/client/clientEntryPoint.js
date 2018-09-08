@@ -1,4 +1,5 @@
 import querystring from 'query-string';
+import Renderer from 'lance/render/Renderer';
 import ClientEngine from 'lance/ClientEngine';
 import Game from '../common/Game';
 const qsOptions = querystring.parse(location.search);
@@ -20,6 +21,6 @@ let options = Object.assign(defaults, qsOptions);
 
 // create a client engine and a game engine
 const gameEngine = new Game(options);
-const clientEngine = new ClientEngine(gameEngine, options);
+const clientEngine = new ClientEngine(gameEngine, options, Renderer);
 
 document.addEventListener('DOMContentLoaded', function(e) { clientEngine.start(); });

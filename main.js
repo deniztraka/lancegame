@@ -20,7 +20,7 @@ import Trace from 'lance/lib/Trace';
 import Game from './src/common/Game';
 
 // Game Instances
-const gameEngine = new Game({ traceLevel: Trace.TRACE_NONE });
+const gameEngine = new Game({ traceLevel: Trace.TRACE_ALL });
 const serverEngine = new ServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
 
 // start the game
