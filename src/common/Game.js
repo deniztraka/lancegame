@@ -1,3 +1,4 @@
+import BaseTypes from 'lance/serialize/BaseTypes';
 import TwoVector from 'lance/serialize/TwoVector';
 import DynamicObject from 'lance/serialize/DynamicObject';
 import GameEngine from 'lance/GameEngine';
@@ -10,18 +11,32 @@ const HEIGHT = 400;
 const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 50;
 
-// a game object to represent each paddle
-class Paddle extends DynamicObject {}
+// A paddle has a health attribute
+class Paddle extends DynamicObject {
+
+    constructor(gameEngine, options, props) {
+        super(gameEngine, options, props);
+        this.health = 15;
+    }
+
+    static get netScheme() {
+        return Object.assign({
+            health: { type: BaseTypes.TYPES.INT16 }
+        }, super.netScheme);
+    }
+}
 
 // a game object to represent the ball
 class Ball extends DynamicObject {
 
-    get bendingMultiple() { return 0.8; }
-    get bendingVelocityMultiple() { return 0; }
-
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
         this.velocity.set(2, 2);
+    }
+
+    // avoid gradual synchronization of velocity
+    get bending() {
+        return { velocity: { percent: 0.0 } };
     }
 }
 
@@ -68,6 +83,7 @@ export default class Game extends GameEngine {
             ball.velocity.x *= -1;
             ball.position.x = 0;
             console.log(`player 2 scored`);
+            paddles[0].health--;
         }
 
         // CHECK RIGHT EDGE:
@@ -84,6 +100,7 @@ export default class Game extends GameEngine {
             ball.velocity.x *= -1;
             ball.position.x = WIDTH - 1;
             console.log(`player 1 scored`);
+            paddles[1].health--;
         }
 
         // ball hits top or bottom edge
@@ -143,14 +160,6 @@ export default class Game extends GameEngine {
     // CLIENT ONLY CODE
     //
     clientSideInit() {
-
-        document.querySelector('body').innerHTML = `
-                <div style="width: 400px; height: 400px; background: black">
-                    <div style="position:absolute;width:10px;height:50px;background:white" class="paddle1"></div>
-                    <div style="position:absolute;width:10px;height:50px;background:white" class="paddle2"></div>
-                    <div style="position:absolute;width:5px; height:5px;background:white" class="ball"></div>
-                </div>`;
-
         this.controls = new KeyboardControls(this.renderer.clientEngine);
         this.controls.bindKey('up', 'up', { repeat: true } );
         this.controls.bindKey('down', 'down', { repeat: true } );
@@ -159,8 +168,10 @@ export default class Game extends GameEngine {
     clientSideDraw() {
 
         function updateEl(el, obj) {
-            el.style.top = obj.position.y + 'px';
+            let health = obj.health>0?obj.health:15;
+            el.style.top = obj.position.y + 10 + 'px';
             el.style.left = obj.position.x + 'px';
+            el.style.background = `#ff${health.toString(16)}f${health.toString(16)}f`;
         }
 
         let paddles = this.world.queryObjects({ instanceType: Paddle });
