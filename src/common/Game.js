@@ -1,7 +1,7 @@
+import GameEngine from 'lance/GameEngine';
 import BaseTypes from 'lance/serialize/BaseTypes';
 import TwoVector from 'lance/serialize/TwoVector';
 import DynamicObject from 'lance/serialize/DynamicObject';
-import GameEngine from 'lance/GameEngine';
 import KeyboardControls from 'lance/controls/KeyboardControls';
 import SimplePhysicsEngine from 'lance/physics/SimplePhysicsEngine';
 
