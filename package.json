@@ -12,9 +12,9 @@
     "babel-plugin-module-resolver": "^2.7.1",
     "babel-preset-es2015": "^6.24.1",
     "express": "^4.14.0",
-    "lance-gg": "^3.0.1",
+    "lance-gg": "^3.0.7",
     "query-string": "^4.2.3",
-    "socket.io": "^1.4.8",
+    "socket.io": "^2.1.1",
     "webpack": "^3.8.1"
   },
   "devDependencies": {

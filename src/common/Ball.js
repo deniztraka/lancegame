@@ -4,13 +4,16 @@ import DynamicObject from 'lance/serialize/DynamicObject';
 
 export default class Ball extends DynamicObject {
 
-    get bendingMultiple() { return 0.8; }
-    get bendingVelocityMultiple() { return 0; }
-
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
         this.class = Ball;
         this.velocity.set(2, 2);
+    }
+
+    // turn off bending on velocity (gradual error correction),
+    // because the ball flips velocity as it bounces off the wall
+    get bending() {
+        return { velocity: { percent: 0.0 } };
     }
 
     onAddToWorld(gameEngine) {
