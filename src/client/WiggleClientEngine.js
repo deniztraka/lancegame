@@ -1,11 +1,11 @@
 import ClientEngine from 'lance/ClientEngine';
-import MyRenderer from '../client/MyRenderer';
+import WiggleRenderer from '../client/WiggleRenderer';
 import KeyboardControls from 'lance/controls/KeyboardControls';
 
-export default class MyClientEngine extends ClientEngine {
+export default class WiggleClientEngine extends ClientEngine {
 
     constructor(gameEngine, options) {
-        super(gameEngine, options, MyRenderer);
+        super(gameEngine, options, WiggleRenderer);
 
         this.controls = new KeyboardControls(this);
         this.controls.bindKey('up', 'up', { repeat: true } );

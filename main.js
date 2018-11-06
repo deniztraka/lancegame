@@ -1,11 +1,9 @@
-'use strict';
-
 import express from 'express';
 import socketIO from 'socket.io';
 import path from 'path';
 
 const PORT = process.env.PORT || 3000;
-const INDEX = path.join(__dirname, './index.html');
+const INDEX = path.join(__dirname, './dist/index.html');
 
 // define routes and socket
 const server = express();
@@ -15,13 +13,13 @@ let requestHandler = server.listen(PORT, () => console.log(`Listening on ${ PORT
 const io = socketIO(requestHandler);
 
 // Game Server
-import MyServerEngine from './src/server/MyServerEngine';
-import MyGameEngine from './src/common/MyGameEngine';
+import WiggleServerEngine from './src/server/WiggleServerEngine';
+import WiggleGameEngine from './src/common/WiggleGameEngine';
 import Trace from 'lance/lib/Trace';
 
 // Game Instances
-const gameEngine = new MyGameEngine({ traceLevel: Trace.TRACE_NONE });
-const serverEngine = new MyServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
+const gameEngine = new WiggleGameEngine({ traceLevel: Trace.TRACE_NONE });
+const serverEngine = new WiggleServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
 
 // start the game
 serverEngine.start();

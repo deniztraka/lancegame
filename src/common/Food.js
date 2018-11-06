@@ -1,8 +1,6 @@
-'use strict';
-
 import DynamicObject from 'lance/serialize/DynamicObject';
 
-export default class PlayerAvatar extends DynamicObject {
+export default class Food extends DynamicObject {
 
     static get netScheme() {
         return Object.assign({
@@ -12,6 +10,6 @@ export default class PlayerAvatar extends DynamicObject {
 
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
-        this.class = PlayerAvatar;
+        this.class = Food;
     };
 }

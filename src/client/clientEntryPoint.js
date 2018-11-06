@@ -1,6 +1,6 @@
 import querystring from 'query-string';
-import MyClientEngine from '../client/MyClientEngine';
-import MyGameEngine from '../common/MyGameEngine';
+import WiggleClientEngine from '../client/WiggleClientEngine';
+import WiggleGameEngine from '../common/WiggleGameEngine';
 const qsOptions = querystring.parse(location.search);
 
 // default options, overwritten by query-string options
@@ -19,7 +19,7 @@ const defaults = {
 let options = Object.assign(defaults, qsOptions);
 
 // create a client engine and a game engine
-const gameEngine = new MyGameEngine(options);
-const clientEngine = new MyClientEngine(gameEngine, options);
+const gameEngine = new WiggleGameEngine(options);
+const clientEngine = new WiggleClientEngine(gameEngine, options);
 
 document.addEventListener('DOMContentLoaded', function(e) { clientEngine.start(); });
