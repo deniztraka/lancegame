@@ -1,4 +1,6 @@
 import Renderer from 'lance/render/Renderer';
+import Wiggle from '../common/Wiggle';
+import Food from '../common/Food';
 
 let ctx = null;
 let canvas = null;
@@ -18,6 +20,9 @@ export default class WiggleRenderer extends Renderer {
         game.zoom = game.h / game.spaceHeight;
         if (game.w / game.spaceWidth < game.zoom) game.zoom = game.w / game.spaceWidth;
         ctx = canvas.getContext('2d');
+        ctx.lineWidth = 2 / game.zoom;
+        ctx.strokeStyle = ctx.fillStyle = 'white';
+
     }
 
     draw(t, dt) {
@@ -43,36 +48,45 @@ export default class WiggleRenderer extends Renderer {
 
     }
 
-    drawWiggle(wObj) {
-        let body = wObj.physicsObj;
-        let x = body.position[0];
-        let y = body.position[1];
-        this.drawCircle(x, y, game.headRadius);
-        for (let i = 0; i < wObj.bodyParts.length; i++) {
-            switch (wObj.bodyParts[i]) {
+    drawWiggle(w) {
+        let x = w.position.x;
+        let y = w.position.y;
+        this.drawCircle(x, y, game.headRadius, true);
+        for (let i = w.bodyParts.length - 1; i >= 0; i--) {
+            switch (w.bodyParts[i]) {
             case 'up':
-                y += 1; break;
+                y -= game.moveDist; break;
             case 'down':
-                y -= 1; break;
+                y += game.moveDist; break;
             case 'right':
-                x += 1; break;
+                x -= game.moveDist; break;
             case 'left':
-                x -= 1; break;
+                x += game.moveDist; break;
             }
-            this.drawCircle(x, y, game.bodyRadius);
+            this.drawCircle(x, y, game.bodyRadius, true);
         }
     }
 
-    drawFood(foodObj) {
-        let body = foodObj.physicsObj;
-        this.drawCircle(body.position[0], body.position[1], game.foodRadius);
+    drawFood(f) {
+        this.drawCircle(f.position.x, f.position.y, game.foodRadius, false);
     }
 
-    drawCircle(x, y, radius) {
+    drawCircle(x, y, radius, fill) {
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, 2*Math.PI);
-        ctx.fill();
+        fill && ctx.fill();
         ctx.closePath();
+    }
+
+    drawBounds() {
+        ctx.beginPath();
+        ctx.moveTo(-game.spaceWidth/2, -game.spaceHeight/2);
+        ctx.lineTo(-game.spaceWidth/2, game.spaceHeight/2);
+        ctx.lineTo( game.spaceWidth/2, game.spaceHeight/2);
+        ctx.lineTo( game.spaceWidth/2, -game.spaceHeight/2);
+        ctx.lineTo(-game.spaceWidth/2, -game.spaceHeight/2);
+        ctx.closePath();
+        ctx.stroke();
     }
 
 }

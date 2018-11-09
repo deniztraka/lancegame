@@ -21,5 +21,15 @@ export default class Wiggle extends DynamicObject {
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
         this.class = Wiggle;
-    };
+    }
+
+    syncTo(other) {
+        super.syncTo(other);
+        this.direction = other.direction;
+        this.bodyParts = other.bodyParts;
+    }
+
+    toString() {
+        return `Wiggle::${super.toString()} direction=${this.direction} body=[${this.bodyParts.join()}]`;
+    }
 }

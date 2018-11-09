@@ -14,7 +14,9 @@ export default class WiggleGameEngine extends GameEngine {
 
         // game variables
         Object.assign(this, {
-            foodRadius: 0.2, headRadius: 0.4, bodyRadius: 0.3, spaceWidth: 16, spaceHeight: 9
+            foodRadius: 0.2, headRadius: 0.2, bodyRadius: 0.15,
+            spaceWidth: 16, spaceHeight: 9,
+            moveDist: 0.1
         });
     }
 
@@ -36,15 +38,20 @@ export default class WiggleGameEngine extends GameEngine {
             if (obj instanceof Wiggle) {
                 switch (obj.direction) {
                 case 'up':
-                    obj.position.y += 10; break;
+                    obj.position.y += this.moveDist; break;
                 case 'down':
-                    obj.position.y -= 10; break;
+                    obj.position.y -= this.moveDist; break;
                 case 'right':
-                    obj.position.x += 10; break;
+                    obj.position.x += this.moveDist; break;
                 case 'left':
-                    obj.position.x -= 10; break;
+                    obj.position.x -= this.moveDist; break;
                 }
                 obj.bodyParts.push(obj.direction);
+                obj.bodyParts.shift();
+                if (obj.position.y > this.spaceHeight / 2) obj.direction = 'down';
+                if (obj.position.x > this.spaceWidth / 2) obj.direction = 'left';
+                if (obj.position.y < -this.spaceHeight / 2) obj.direction = 'up';
+                if (obj.position.x < -this.spaceWidth / 2) obj.direction = 'right';
             }
         });
     }
@@ -54,7 +61,7 @@ export default class WiggleGameEngine extends GameEngine {
         super.processInput(inputData, playerId);
 
         // get the player's primary object
-        let player = this.world.getPlayerObject(playerId);
+        let player = this.world.queryObject({ playerId });
         if (player) {
             player.direction = inputData.input;
         }
