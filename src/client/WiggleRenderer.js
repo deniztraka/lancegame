@@ -68,7 +68,7 @@ export default class WiggleRenderer extends Renderer {
     }
 
     drawFood(f) {
-        this.drawCircle(f.position.x, f.position.y, game.foodRadius, false);
+        this.drawCircle(f.position.x, f.position.y, game.foodRadius, true);
     }
 
     drawCircle(x, y, radius, fill) {

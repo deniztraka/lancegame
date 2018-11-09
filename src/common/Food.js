@@ -8,6 +8,10 @@ export default class Food extends DynamicObject {
         }, super.netScheme);
     }
 
+    syncTo(other) {
+        super.syncTo(other);
+    }
+
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
         this.class = Food;
