@@ -1,5 +1,4 @@
 import ServerEngine from 'lance/ServerEngine';
-import TwoVector from 'lance/serialize/TwoVector';
 import Wiggle from '../common/Wiggle';
 import Food from '../common/Food';
 
@@ -30,13 +29,15 @@ export default class WiggleServerEngine extends ServerEngine {
 
     onPlayerDisconnected(socketId, playerId) {
         super.onPlayerDisconnected(socketId, playerId);
-        let playerObj = this.gameEngine.world.queryObjects({ playerId });
-        this.gameEngine.removeObjectFromWorld(playerObj);
+        // let playerObj = this.gameEngine.world.queryObjects({ playerId });
+        // this.gameEngine.removeObjectFromWorld(playerObj);
     }
 
     wiggleEatFood(w, f) {
         if (!(f.id in this.gameEngine.world.objects))
             return;
+
+        console.log(`wiggle eats food ${f.toString()} ${w.toString()}`);
 
         w.grow = true;
         this.gameEngine.removeObjectFromWorld(f);
@@ -44,10 +45,45 @@ export default class WiggleServerEngine extends ServerEngine {
         this.gameEngine.addObjectToWorld(newF);
     }
 
+    wiggleHitWiggle(w1, w2) {
+        if (!(w2.id in this.gameEngine.world.objects))
+            return;
+
+        console.log(`wiggle hit wiggle ${w1.toString()} ${w2.toString()}`);
+
+        this.gameEngine.removeObjectFromWorld(w1);
+    }
+
     stepLogic() {
         let wiggles = this.gameEngine.world.queryObjects({ instanceType: Wiggle });
         let foodObjects = this.gameEngine.world.queryObjects({ instanceType: Food });
         for (let w of wiggles) {
+
+            // check for collision
+            for (let w2 of wiggles) {
+                if (w === w2)
+                    continue;
+
+                let bodyPart = w2.position.clone();
+                for (let i = w2.bodyParts.length - 1; i >= 0; i--) {
+                    switch (w2.bodyParts[i]) {
+                    case 'up':
+                        bodyPart.y -= this.gameEngine.moveDist; break;
+                    case 'down':
+                        bodyPart.y += this.gameEngine.moveDist; break;
+                    case 'right':
+                        bodyPart.x -= this.gameEngine.moveDist; break;
+                    case 'left':
+                        bodyPart.x += this.gameEngine.moveDist; break;
+                    }
+                }
+                let distance = bodyPart.clone().subtract(w.position);
+                if (distance.length() < this.gameEngine.collideDistance) {
+                    this.wiggleHitWiggle(w, w2);
+                }
+            }
+
+            // check for food-eating
             for (let f of foodObjects) {
                 let distance = w.position.clone().subtract(f.position);
                 if (distance.length() < this.gameEngine.eatDistance) {

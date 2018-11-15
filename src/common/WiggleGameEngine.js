@@ -1,5 +1,3 @@
-'use strict';
-
 import GameEngine from 'lance/GameEngine';
 import SimplePhysicsEngine from 'lance/physics/SimplePhysicsEngine';
 import TwoVector from 'lance/serialize/TwoVector';
@@ -15,9 +13,10 @@ export default class WiggleGameEngine extends GameEngine {
 
         // game variables
         Object.assign(this, {
-            foodRadius: 0.2, headRadius: 0.2, bodyRadius: 0.15,
+            foodRadius: 0.1, headRadius: 0.2, bodyRadius: 0.1,
             spaceWidth: 16, spaceHeight: 9, moveDist: 0.04,
-            foodCount: 16, eatDistance: 0.4, startBodyLength: 10
+            foodCount: 16, eatDistance: 0.3, collideDistance: 0.3,
+            startBodyLength: 10
         });
     }
 
@@ -30,14 +29,9 @@ export default class WiggleGameEngine extends GameEngine {
         super.start();
     }
 
-    // returns a random number between -0.5 and 0.5
-    rand() {
-        return Math.random() - 0.5;
-    }
-
     randPos() {
-        let x = this.rand() * this.spaceWidth;
-        let y = this.rand() * this.spaceHeight;
+        let x = (Math.random() - 0.5) * this.spaceWidth;
+        let y = (Math.random() - 0.5) * this.spaceHeight;
         return new TwoVector(x, y);
     }
 
