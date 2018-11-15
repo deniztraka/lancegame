@@ -1,5 +1,3 @@
-'use strict';
-
 import DynamicObject from 'lance/serialize/DynamicObject';
 
 export default class Ball extends DynamicObject {

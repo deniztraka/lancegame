@@ -1,5 +1,3 @@
-'use strict';
-
 import Renderer from 'lance/render/Renderer';
 
 export default class MyRenderer extends Renderer {
