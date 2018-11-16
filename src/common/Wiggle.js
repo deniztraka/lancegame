@@ -11,25 +11,23 @@ export default class Wiggle extends DynamicObject {
     static get netScheme() {
         return Object.assign({
             direction: { type: BaseTypes.TYPES.STRING },
-            bodyParts: {
-                type: BaseTypes.TYPES.LIST,
-                itemType: BaseTypes.TYPES.STRING
-            }
+            bodyLength: { type: BaseTypes.TYPES.INT16 }
         }, super.netScheme);
     }
 
     constructor(gameEngine, options, props) {
         super(gameEngine, options, props);
         this.class = Wiggle;
+        this.bodyParts = [];
     }
 
     syncTo(other) {
         super.syncTo(other);
         this.direction = other.direction;
-        this.bodyParts = other.bodyParts;
+        this.bodyLength = other.bodyLength;
     }
 
     toString() {
-        return `Wiggle::${super.toString()} direction=${this.direction} body=[${this.bodyParts.join()}]`;
+        return `Wiggle::${super.toString()} direction=${this.direction} length=${this.bodyLength}`;
     }
 }

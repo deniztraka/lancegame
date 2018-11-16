@@ -21,8 +21,7 @@ export default class WiggleServerEngine extends ServerEngine {
         super.onPlayerConnected(socket);
         let player = new Wiggle(this.gameEngine, null, { position: this.gameEngine.randPos() });
         player.direction = 'up';
-        player.bodyParts = [];
-        for (let i = 0; i < this.gameEngine.startBodyLength; i++) player.bodyParts.push('right');
+        player.bodyLength = this.gameEngine.startBodyLength;
         player.playerId = socket.playerId;
         this.gameEngine.addObjectToWorld(player);
     }
@@ -33,13 +32,14 @@ export default class WiggleServerEngine extends ServerEngine {
         // this.gameEngine.removeObjectFromWorld(playerObj);
     }
 
+    // Eating Food:
+    // increase body length, and remove the food
     wiggleEatFood(w, f) {
         if (!(f.id in this.gameEngine.world.objects))
             return;
 
         console.log(`wiggle eats food ${f.toString()} ${w.toString()}`);
-
-        w.grow = true;
+        w.bodyLength++;
         this.gameEngine.removeObjectFromWorld(f);
         let newF = new Food(this.gameEngine, null, { position: this.gameEngine.randPos() });
         this.gameEngine.addObjectToWorld(newF);
@@ -64,22 +64,10 @@ export default class WiggleServerEngine extends ServerEngine {
                 if (w === w2)
                     continue;
 
-                let bodyPart = w2.position.clone();
-                for (let i = w2.bodyParts.length - 1; i >= 0; i--) {
-                    switch (w2.bodyParts[i]) {
-                    case 'up':
-                        bodyPart.y -= this.gameEngine.moveDist; break;
-                    case 'down':
-                        bodyPart.y += this.gameEngine.moveDist; break;
-                    case 'right':
-                        bodyPart.x -= this.gameEngine.moveDist; break;
-                    case 'left':
-                        bodyPart.x += this.gameEngine.moveDist; break;
-                    }
-                }
-                let distance = bodyPart.clone().subtract(w.position);
-                if (distance.length() < this.gameEngine.collideDistance) {
-                    this.wiggleHitWiggle(w, w2);
+                for (let i = 0; i < w2.bodyParts.length; i++) {
+                    let distance = w2.bodyParts[i].clone().subtract(w.position);
+                    if (distance.length() < this.gameEngine.collideDistance)
+                        this.wiggleHitWiggle(w, w2);
                 }
             }
 

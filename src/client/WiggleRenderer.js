@@ -52,18 +52,9 @@ export default class WiggleRenderer extends Renderer {
         let x = w.position.x;
         let y = w.position.y;
         this.drawCircle(x, y, game.headRadius, true);
-        for (let i = w.bodyParts.length - 1; i >= 0; i--) {
-            switch (w.bodyParts[i]) {
-            case 'up':
-                y -= game.moveDist; break;
-            case 'down':
-                y += game.moveDist; break;
-            case 'right':
-                x -= game.moveDist; break;
-            case 'left':
-                x += game.moveDist; break;
-            }
-            this.drawCircle(x, y, game.bodyRadius, true);
+        for (let i = 0; i < w.bodyParts.length; i++) {
+            let nextPos = w.bodyParts[i];
+            this.drawCircle(nextPos.x, nextPos.y, game.bodyRadius, true);
         }
     }
 
