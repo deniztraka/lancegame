@@ -7,7 +7,7 @@ const qsOptions = querystring.parse(location.search);
 // default options, overwritten by query-string options
 // is sent to both game engine and client engine
 const defaults = {
-    traceLevel: Trace.TRACE_ALL,
+    traceLevel: Trace.TRACE_NONE,
     delayInputCount: 3,
     scheduler: 'render-schedule',
     syncOptions: {

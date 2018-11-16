@@ -35,7 +35,11 @@ export default class WiggleGameEngine extends GameEngine {
         return new TwoVector(x, y);
     }
 
-    moveAll() {
+    moveAll(stepInfo) {
+
+        if (stepInfo.isReenact)
+            return;
+
         this.world.forEachObject((id, obj) => {
             if (obj instanceof Wiggle) {
 

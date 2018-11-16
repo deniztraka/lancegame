@@ -28,6 +28,8 @@ export default class Wiggle extends DynamicObject {
     }
 
     toString() {
+        // let body = '';
+        // this.bodyParts.forEach((b, i) => { body += `${b.toString()},`; });
         return `Wiggle::${super.toString()} direction=${this.direction} length=${this.bodyLength}`;
     }
 }

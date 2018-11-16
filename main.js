@@ -18,7 +18,7 @@ import WiggleGameEngine from './src/common/WiggleGameEngine';
 import Trace from 'lance/lib/Trace';
 
 // Game Instances
-const gameEngine = new WiggleGameEngine({ traceLevel: Trace.TRACE_ALL });
+const gameEngine = new WiggleGameEngine({ traceLevel: Trace.TRACE_NONE });
 const serverEngine = new WiggleServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
 
 // start the game
